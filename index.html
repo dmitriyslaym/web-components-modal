@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Component</title>
+  <script src="./uc-modal.js"></script>
+</head>
+<body>
+<style>
+  body {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+  }
+  button {
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+    border-image: none;
+    border: 1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #pay-button {
+    margin: 50px auto;
+    display: block;
+    background-color: forestgreen;
+    color: white;
+    font-size: 28px;
+  }
+</style>
+
+<button id="pay-button">Pay to trigger modal confirmation</button>
+
+<uc-modal>
+  <h1 slot="title">Are you confirming the payment?</h1>
+  <p slot="main-content">
+    This operation can not be reverted
+  </p>
+</uc-modal>
+
+<script>
+  const payButton$ = document.getElementById('pay-button');
+  const modal$ = document.getElementsByTagName('uc-modal')[0];
+  modal$.addEventListener('paymentConfirmed', ({ detail }) => {
+    alert(`User has confirmed payment on ${new Date(detail.timestamp).toDateString()}`)
+  });
+  modal$.addEventListener('paymentCanceled', ({ detail }) => {
+    alert(`User has canceled payment on ${new Date(detail.timestamp).toDateString()}`)
+  });
+  payButton$.addEventListener('click', () => {
+    modal$.open();
+  });
+</script>
+</body>
+</html>
